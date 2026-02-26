@@ -10,6 +10,22 @@
     <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
   </head>
   <body>
+    <!--
+      This file is served by the Vite development server or built into the
+      production bundle. Opening `index.html` directly in a browser (file://)
+      will not work because the module imports need a server to resolve.
+
+      Be aware that certain browser extensions can block resources from
+      localhost or inject CSP rules that prevent Vite's scripts from running.
+      If you encounter `ERR_BLOCKED_BY_CLIENT` or CSP complaints mentioning
+      `chrome-extension://`, try disabling those extensions or using a
+      different browser/profile.
+    -->
+    <noscript>
+      <div style="padding:1rem; color:#a00; text-align:center;">
+        JavaScript is required to run this application. Please enable it.
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

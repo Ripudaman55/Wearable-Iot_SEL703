@@ -18,6 +18,11 @@ export default function Dashboard() {
   const loadHealthData = async () => {
     try {
       const data = await fetchHealthData();
+      console.debug('received health data', data);
+      if (!data || typeof data.heart_rate !== 'number') {
+        throw new Error('API returned invalid health data');
+      }
+
       setHealthData(data);
       setError(null);
       setLastUpdate(new Date());
@@ -30,12 +35,14 @@ export default function Dashboard() {
         return newHistory.slice(-MAX_CHART_POINTS);
       });
     } catch (err) {
-      setError('Unable to connect to the health monitoring system');
+      const msg = err instanceof Error ? err.message : String(err);
+      setError('Unable to connect to the health monitoring system: ' + msg);
       console.error('Failed to fetch health data:', err);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   useEffect(() => {
     loadHealthData();
@@ -65,7 +72,20 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">Connecting to wearable device...</p>
+          <p className="text-gray-600 font-medium">Searching for watch / connecting to API…</p>
+        </div>
+      </div>
+    );
+  }
+
+  // if loading has finished but we never obtained a valid payload, show a simple
+  // message so that the user isn't staring at a white viewport with nothing rendered.
+  if (!healthData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-lg text-gray-700">Unable to load health data.</p>
+          {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
         </div>
       </div>
     );
