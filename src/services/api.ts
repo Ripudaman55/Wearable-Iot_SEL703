@@ -1,12 +1,12 @@
 import { HealthData } from '../types/health';
 
-const API_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/predict`;
+const API_URL = 'http://192.168.1.177:5000/api/sensor';
 
 export async function fetchHealthData(): Promise<HealthData> {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      
       'Content-Type': 'application/json',
     },
   });
